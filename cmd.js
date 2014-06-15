@@ -17,6 +17,10 @@ function createCanvas () {
   return document.createElement("canvas");
 }
 
+function resolveUniforms (uniforms) {
+  return Q(uniforms); // FIXME In the future we will have to resolve the uniform textures
+}
+
 /////////////////////
 // Parameters
 
@@ -25,31 +29,24 @@ var pkg = require("./package.json");
 program
   .version(pkg.version)
   .description(pkg.description)
-  .option("-g, --glsl [glsl]", "The GLSL source (a file or the source code)")
-  .option("-f, --from [image]", "The from image file")
-  .option("-t, --to [image]", "The to image file")
-  .option("-u, --uniforms [json]", "The uniforms in json format", JSON.parse)
-  .option("-w, --width [int]", "The width to use in the validation", parseInt)
-  .option("-h, --height [int]", "The height to use in the validation", parseInt)
+  .option("-g, --glsl <glsl>", "The GLSL source (a file or the source code)", function (glsl) {
+    return glsl.match(/\.glsl$/) ? Q.nfcall(fs.readFile, glsl, "utf8") : Q(glsl);
+  })
+  .option("-f, --from [image]", "The from image file", Qimage, Q(null))
+  .option("-t, --to [image]", "The to image file", Qimage, Q(null))
+  .option("-u, --uniforms [json]", "The uniforms in json format", _.compose(resolveUniforms, JSON.parse), Q({}))
+  .option("-w, --width [int]", "The width to use in the validation", parseInt, 40)
+  .option("-h, --height [int]", "The height to use in the validation", parseInt, 30)
   .parse(process.argv);
-
-if (!program.glsl) throw new Error("--glsl is required.");
-if (!program.from) throw new Error("--from is required.");
-if (!program.to) throw new Error("--to is required.");
-
-var glsl = program.glsl.match(/\.glsl$/) ? Q.nfcall(fs.readFile, program.glsl, "utf8") : Q(program.glsl);
-var from = Qimage(program.from);
-var to = Qimage(program.to);
-var uniforms = Q(program.uniforms || {}); // FIXME In the future we will have to resolve the uniform textures
-var width = program.width || 40;
-var height = program.height || 30;
 
 /////////////////////
 // Run the validator
 
-Q.all([ glsl, from, to, uniforms ])
+// TODO: instead of console.logging, we should log a JSON result.
+
+Q.all([ program.glsl, program.from, program.to, program.uniforms ])
 .spread(function validate (glsl, from, to, uniforms) {
-  var validator = new GlslTransitionValidator(from, to, createCanvas, width, height);
+  var validator = new GlslTransitionValidator(from, to, createCanvas, program.width, program.height);
   var validation = validator.forGlsl(glsl);
 
   var passed = 0;
@@ -84,10 +81,10 @@ Q.all([ glsl, from, to, uniforms ])
     _.bind(validation.satisfyUniforms, validation, uniforms),
     _.bind(validation.validateUniforms, validation, uniforms));
 
-  it("is valid for from",
-    _.bind(validation.isValidFrom, validation, uniforms));
+  from && it("is valid for from",
+        _.bind(validation.isValidFrom, validation, uniforms));
 
-  it("is valid for to",
+  to && it("is valid for to",
     _.bind(validation.isValidTo, validation, uniforms));
 
   return { success: failed===0, passed: passed, failed: failed };
