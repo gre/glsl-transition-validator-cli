@@ -1,15 +1,10 @@
 glsl-transition-validator-cli
 =========================
 
-Validate a GLSL Transition from the CLI.
+Validate a GLSL Transition from the CLI. Using `glsl-transition-validator`.
 
-Using `glsl-transition-validator`.
-
-* Project Status: **Under Development** – it is currently based on node-webgl which needs a graphical interface and even is creating a window for each CLI...
-
-Current status
----
-There is not yet parameters but:
+Example
+----
 
 ```bash
 $ glsl-transition-validator --glsl cube.glsl -u '{"persp":0.7,"unzoom":0.3,"reflection":0.4,"floating":3}' --from from.png --to to.png --width 512 --height 512
@@ -41,3 +36,9 @@ Result: 3 passed. 1 failed.
 $ echo $?
 1
 ```
+
+
+Current status
+---
+
+* Project Status: **Under Development** – it is currently based on node-webgl which needs a graphical interface and even is creating a window for each CLI...
