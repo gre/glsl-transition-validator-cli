@@ -19,7 +19,7 @@ $ echo $?
 0
 ```
 
-and when adding a 'f' GLSL uniform:
+and when removing the 'persp' GLSL uniform:
 
 ```bash
 $ glsl-transition-validator --glsl cube.glsl -u '{"unzoom":0.3,"reflection":0.4,"floating":3}' --from from.png --to to.png --width 512 --height 512
