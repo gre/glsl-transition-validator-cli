@@ -32,11 +32,11 @@ program
   .option("-g, --glsl <glsl>", "The GLSL source (a file or the source code)", function (glsl) {
     return glsl.match(/\.glsl$/) ? Q.nfcall(fs.readFile, glsl, "utf8") : Q(glsl);
   })
+  .option("-u, --uniforms [json]", "The uniforms in json format", _.compose(resolveUniforms, JSON.parse), Q({}))
   .option("-f, --from [image]", "The from image file", Qimage, Q(null))
   .option("-t, --to [image]", "The to image file", Qimage, Q(null))
-  .option("-u, --uniforms [json]", "The uniforms in json format", _.compose(resolveUniforms, JSON.parse), Q({}))
-  .option("-w, --width [int]", "The width to use in the validation", parseInt, 40)
-  .option("-h, --height [int]", "The height to use in the validation", parseInt, 30)
+  .option("-w, --width [int]", "The width to use in the validation", function (s) { return parseInt(s, 10); }, 40)
+  .option("-h, --height [int]", "The height to use in the validation", function (s) { return parseInt(s, 10); }, 30)
   .parse(process.argv);
 
 /////////////////////
