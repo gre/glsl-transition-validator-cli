@@ -1,6 +1,6 @@
 {
   "name": "glsl-transition-validator-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Validate a glsl-transition from CLI",
   "author": "Gaëtan Renaudeau <renaudeau.gaetan@gmail.com>",
   "bin": {
