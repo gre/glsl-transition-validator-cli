@@ -12,7 +12,7 @@ Current status
 There is not yet parameters but:
 
 ```bash
-$ node cmd.js 
+$ glsl-transition-validator --glsl cube.glsl -u '{"persp":0.7,"unzoom":0.3,"reflection":0.4,"floating":3}' --from from.png --to to.png --width 512 --height 512
 Status: Using GLEW 1.10.0
 compiles: OK.
 satisfy uniforms: OK.
@@ -27,13 +27,13 @@ $ echo $?
 and when adding a 'f' GLSL uniform:
 
 ```bash
-$ node cmd.js
+$ glsl-transition-validator --glsl cube.glsl -u '{"unzoom":0.3,"reflection":0.4,"floating":3}' --from from.png --to to.png --width 512 --height 512
 Status: Using GLEW 1.10.0
 compiles: OK.
 satisfy uniforms: Failed.
-[ { message: 'f uniform should be provided.',
+[ { message: 'persp uniform should be provided.',
     reasonId: 'UniformNotProvided',
-    uniformId: 'f' } ]
+    uniformId: 'persp' } ]
 is valid for from: OK.
 is valid for to: OK.
 Result: 3 passed. 1 failed.

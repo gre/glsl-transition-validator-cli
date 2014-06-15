@@ -16,7 +16,8 @@
     "glsl-transition-validator": "0.0.x",
     "node-webgl": "git://github.com/gre/node-webgl.git",
     "q": "1.0.x",
-    "qimage": "1.1.x"
+    "qimage": "1.1.x",
+    "commander": "2.2.0"
   },
   "license": "MIT"
 }
