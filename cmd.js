@@ -10,12 +10,10 @@ var document = WebGL.document();
 var Image = WebGL.Image;
 
 ///// Configure libs for this context + some adapters
-
 Qimage.Image = Image;
-
-function createCanvas () {
+GlslTransitionValidator.createCanvas = function () {
   return document.createElement("canvas");
-}
+};
 
 function resolveUniforms (uniforms) {
   return Q(uniforms); // FIXME In the future we will have to resolve the uniform textures
@@ -46,7 +44,7 @@ program
 
 Q.all([ program.glsl, program.from, program.to, program.uniforms ])
 .spread(function validate (glsl, from, to, uniforms) {
-  var validator = new GlslTransitionValidator(from, to, createCanvas, program.width, program.height);
+  var validator = new GlslTransitionValidator(from, to, program.width, program.height);
   var validation = validator.forGlsl(glsl);
 
   var passed = 0;

@@ -1,6 +1,6 @@
 {
   "name": "glsl-transition-validator-cli",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Validate a glsl-transition from CLI",
   "author": "Gaëtan Renaudeau <renaudeau.gaetan@gmail.com>",
   "bin": {
@@ -13,7 +13,7 @@
   "keywords": ["glsl", "thumbnail", "glsl-transition", "cli"],
   "dependencies": {
     "lodash": "2.4.1",
-    "glsl-transition-validator": "0.2.x",
+    "glsl-transition-validator": "0.3.x",
     "node-webgl": "git://github.com/gre/node-webgl.git",
     "q": "1.0.x",
     "qimage": "1.1.x",
