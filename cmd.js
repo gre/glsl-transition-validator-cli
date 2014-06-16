@@ -1,23 +1,18 @@
 var program = require('commander');
 var GlslTransitionValidator = require("glsl-transition-validator");
+var GlslioTextureResolver = require("glslio-texture-resolver");
 var Q = require("q");
 var _ = require("lodash");
-var Qimage = require("qimage");
 var WebGL = require("node-webgl");
 var fs = require("fs");
 
-var document = WebGL.document();
-var Image = WebGL.Image;
-
 ///// Configure libs for this context + some adapters
-Qimage.Image = Image;
+var document = WebGL.document();
+var Qimage = require("node-webgl-qimage")(WebGL.Image);
+var uniformsResolver = new GlslioTextureResolver(Qimage);
 GlslTransitionValidator.createCanvas = function () {
   return document.createElement("canvas");
 };
-
-function resolveUniforms (uniforms) {
-  return Q(uniforms); // FIXME In the future we will have to resolve the uniform textures
-}
 
 /////////////////////
 // Parameters
@@ -30,7 +25,7 @@ program
   .option("-g, --glsl <glsl>", "The GLSL source (a file or the source code)", function (glsl) {
     return glsl.match(/\.glsl$/) ? Q.nfcall(fs.readFile, glsl, "utf8") : Q(glsl);
   })
-  .option("-u, --uniforms [json]", "The uniforms in json format", _.compose(resolveUniforms, JSON.parse), Q({}))
+  .option("-u, --uniforms [json]", "The uniforms in json format", _.compose(_.bind(uniformsResolver.resolve, uniformsResolver), JSON.parse), Q({}))
   .option("-f, --from [image]", "The from image file", Qimage, Q(null))
   .option("-t, --to [image]", "The to image file", Qimage, Q(null))
   .option("-w, --width [int]", "The width to use in the validation", function (s) { return parseInt(s, 10); }, 40)
