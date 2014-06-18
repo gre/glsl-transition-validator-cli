@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var program = require('commander');
 var GlslTransitionValidator = require("glsl-transition-validator");
 var GlslioTextureResolver = require("glslio-texture-resolver");
